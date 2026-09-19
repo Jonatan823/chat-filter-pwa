@@ -7,14 +7,14 @@ document.getElementById('btn-procesar').addEventListener('click', () => {
     }
 
     const boton = document.getElementById('btn-procesar');
-    boton.textContent = "Procesando...";
+    boton.textContent = "Procesando S.L.E.R...";
     boton.disabled = true;
 
     try {
         const resultadoHTML = procesarSLER(textoInput);
         const divResultado = document.getElementById('resultado');
         divResultado.style.display = 'block';
-        divResultado.innerHTML = resultadoHTML;
+        divResultado.textContent = resultadoHTML;
     } catch (error) {
         console.error("Error:", error);
         alert("Ocurrió un error al procesar el texto.");
