@@ -1,46 +1,64 @@
-const GEMINI_API_KEY = "MI_TOKEN_DE_PRUEBA_12345";
-
-document.getElementById('btn-procesar').addEventListener('click', async () => {
+document.getElementById('btn-procesar').addEventListener('click', () => {
     const textoInput = document.getElementById('texto-input').value;
-    
+
     if (!textoInput.trim()) {
-        alert("Por favor, escribe algún texto para filtrar.");
+        alert("Por favor, ingresa algún texto.");
         return;
     }
 
     const boton = document.getElementById('btn-procesar');
-    boton.textContent = "Procesando con IA...";
+    boton.textContent = "Procesando...";
     boton.disabled = true;
 
     try {
-        const prompt = `Mejora y da un tono elegante y formal al siguiente mensaje: "${textoInput}"`;
-        
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
-            })
-        });
-
-        const data = await response.json();
-        
-        if (data.candidates && data.candidates.length > 0) {
-            const textoGenerado = data.candidates[0].content.parts[0].text;
-            document.getElementById('texto-input').value = textoGenerado.trim();
-        } else {
-            alert("No se pudo obtener respuesta de la IA.");
-        }
-
+        const resultadoHTML = procesarSLER(textoInput);
+        const divResultado = document.getElementById('resultado');
+        divResultado.style.display = 'block';
+        divResultado.innerHTML = resultadoHTML;
     } catch (error) {
-        console.error("Error en la petición:", error);
-        alert("Ocurrió un error al conectar con la API.");
+        console.error("Error:", error);
+        alert("Ocurrió un error al procesar el texto.");
     } finally {
-        boton.textContent = "✨ Filtrar Texto";
+        boton.textContent = "🔄 Aplicar S.L.E.R.";
         boton.disabled = false;
     }
 });
+
+function procesarSLER(texto) {
+    const anchoLinea = 35; 
+    const palabras = texto.trim().replace(/\s+/g, ' ').split(' ');
+    let lineas = [];
+    let lineaActual = "";
+
+    for (let palabra of palabras) {
+        if ((lineaActual + " " + palabra).trim().length <= anchoLinea) {
+            lineaActual = lineaActual ? lineaActual + " " + palabra : palabra;
+        } else {
+            lineas.push(lineaActual);
+            lineaActual = palabra;
+        }
+    }
+    if (lineaActual) {
+        lineas.push(lineaActual);
+    }
+
+    let lineasProcesadas = lineas.map((linea, index) => {
+        let numeroRenglon = index + 1;
+        if (numeroRenglon % 2 !== 0) {
+            return `M${numeroRenglon}: ${linea}`;
+        } else {
+            let palabrasLinea = linea.split(' ');
+            let invertidas = palabrasLinea.reverse().map(p => {
+                if (p.endsWith(',') || p.endsWith('.')) {
+                    let signo = p.slice(-1);
+                    let limpia = p.slice(0, -1);
+                    return signo + limpia;
+                }
+                return p;
+            });
+            return `C${numeroRenglon}: ${invertidas.join(' ')}`;
+        }
+    });
+
+    return lineasProcesadas.join('\n');
+}
