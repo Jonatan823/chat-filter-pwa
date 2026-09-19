@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuración - Filtro Conversacional IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background: #ffffff;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #00a884;
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #00a884;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #008f72;
+        }
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #00a884;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Filtro Conversacional e Intermediario IA</h2>
+        <p>Configura los parámetros de estilo y el tono de respuesta predeterminado para tus mensajes.</p>
+        
+        <label for="tonoSelect">Nivel de Formalidad / Tono:</label>
+        <select id="tonoSelect">
+            <option value="formal">Formal y Académico</option>
+            <option value="diplomatico" selected>Diplomático y Respetuoso</option>
+            <option value="conciso">Directo y Conciso</option>
+        </select>
+
+        <label for="customPromptInput">Instrucción adicional (Opcional):</label>
+        <textarea id="customPromptInput" rows="3" placeholder="Ej: Mantener siempre un matiz reflexivo..."></textarea>
+
+        <button id="saveBtn">Guardar Configuración</button>
+        <div id="statusDiv" class="status"></div>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>
