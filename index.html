@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.L.E.R. Móvil</title>
+    
+    <!-- Metadatos para compartir en Redes Sociales y WhatsApp (Open Graph) -->
+    <meta property="og:title" content="S.L.E.R. Móvil - Sistema de Lectura y Escritura Recíproco">
+    <meta property="og:description" content="Herramienta interactiva para procesamiento de lectura recíproca.">
+    <meta property="og:image" content="https://jonatan823.github.io/chat-filter-pwa/icon-192.png">
+    <meta property="og:type" content="website">
+
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,6 +77,12 @@
         }
         .btn-pip:active {
             background-color: #2d3748;
+        }
+        /* Ocultar el botón de pop-up flotante en pantallas móviles (menores o iguales a 768px) */
+        @media (max-width: 768px) {
+            .btn-pip {
+                display: none;
+            }
         }
         .output-box {
             background: #fafafa;
