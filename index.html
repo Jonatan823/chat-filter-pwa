@@ -8,11 +8,12 @@
     <!-- Metadatos para compartir en Redes Sociales y WhatsApp -->
     <meta property="og:title" content="S.L.E.R. Móvil - Sistema de Lectura y Escritura Recíproco">
     <meta property="og:description" content="Herramienta interactiva para procesamiento de lectura recíproca.">
+    <!-- Recuerda usar un PNG de mayor tamaño aquí cuando crees tu imagen para redes -->
     <meta property="og:image" content="https://jonatan823.github.io/chat-filter-pwa/Sler.ico">
     <meta property="og:type" content="website">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="Sler.ico">
+    <link rel="icon" href="Sler.ico" type="image/x-icon">
     
     <style>
         body {
@@ -79,10 +80,16 @@
             background-color: #2d3748;
         }
         
-        /* Ocultar por completo el botón de pop-up en dispositivos móviles */
+        /* Ocultar tajantemente el botón de pop-up en dispositivos móviles con prioridad máxima */
         @media screen and (max-width: 768px) {
             .btn-pip {
                 display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
             }
         }
 
