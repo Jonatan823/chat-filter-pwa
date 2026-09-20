@@ -1,9 +1,10 @@
-const CACHE_NAME = 'sler-cache-v9';
+const CACHE_NAME = 'sler-cache-v12';
 const urlsToCache = [
     './',
     './index.html',
     './app.js',
-    './manifest.json'
+    './manifest.json',
+    './Sler.ico'
 ];
 
 self.addEventListener('install', (e) => {
