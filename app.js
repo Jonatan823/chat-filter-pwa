@@ -11,10 +11,9 @@ document.getElementById('btn-procesar').addEventListener('click', () => {
     boton.disabled = true;
 
     try {
+        const resultadoHTML = procesarSLERDinamico(textoInput);
         const divResultado = document.getElementById('resultado');
         divResultado.style.display = 'block';
-        
-        const resultadoHTML = procesarSLERDinamico(textoInput, divResultado);
         divResultado.textContent = resultadoHTML;
     } catch (error) {
         console.error("Error:", error);
@@ -25,32 +24,15 @@ document.getElementById('btn-procesar').addEventListener('click', () => {
     }
 });
 
-function procesarSLERDinamico(texto, contenedorSalida) {
-    const computedStyle = window.getComputedStyle(contenedorSalida);
-    const paddingX = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
-    const anchoUtilPx = contenedorSalida.clientWidth - paddingX;
-    const maxWidth = anchoUtilPx > 0 ? anchoUtilPx : 300;
-
-    const spanMedicion = document.createElement('span');
-    spanMedicion.style.visibility = 'hidden';
-    spanMedicion.style.position = 'absolute';
-    spanMedicion.style.whiteSpace = 'nowrap';
-    spanMedicion.style.font = computedStyle.font;
-    document.body.appendChild(spanMedicion);
-
-    function medirTexto(str) {
-        spanMedicion.textContent = str;
-        return spanMedicion.getBoundingClientRect().width;
-    }
-
+function procesarSLERDinamico(texto) {
+    const anchoLinea = 35; 
     const palabras = texto.trim().replace(/\s+/g, ' ').split(' ');
     let lineas = [];
     let lineaActual = "";
 
     for (let palabra of palabras) {
-        let pruebaLinea = lineaActual ? lineaActual + " " + palabra : palabra;
-        if (medirTexto(pruebaLinea) <= maxWidth) {
-            lineaActual = pruebaLinea;
+        if ((lineaActual + " " + palabra).trim().length <= anchoLinea) {
+            lineaActual = lineaActual ? lineaActual + " " + palabra : palabra;
         } else {
             if (lineaActual) lineas.push(lineaActual);
             lineaActual = palabra;
@@ -60,9 +42,6 @@ function procesarSLERDinamico(texto, contenedorSalida) {
         lineas.push(lineaActual);
     }
 
-    document.body.removeChild(spanMedicion);
-
-    // Procesamiento sin indicativos M/C, manteniendo la alternancia y la inversión
     let lineasProcesadas = lineas.map((linea, index) => {
         let numeroRenglon = index + 1;
         if (numeroRenglon % 2 !== 0) {
@@ -84,7 +63,7 @@ function procesarSLERDinamico(texto, contenedorSalida) {
     return lineasProcesadas.join('\n');
 }
 
-// Ventana flotante y arrastrable solo para escritorio (desde el título)
+// Ventana flotante y arrastrable solo para escritorio
 if (window.innerWidth > 768) {
     const container = document.querySelector('.container');
     const header = container.querySelector('h3');
@@ -99,7 +78,7 @@ if (window.innerWidth > 768) {
         isDragging = true;
         startX = e.clientX - container.offsetLeft;
         startY = e.clientY - container.offsetTop;
-        e.preventDefault(); // Evita selección de texto accidental al arrastrar
+        e.preventDefault();
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -111,4 +90,48 @@ if (window.innerWidth > 768) {
     document.addEventListener('mouseup', () => {
         isDragging = false;
     });
+}
+
+// Función para abrir la ventana Picture-in-Picture independiente (Siempre Visible)
+async function abrirVentanaFlotanteReal() {
+    if ('documentPictureInPicture' in window) {
+        try {
+            const pipWindow = await documentPictureInPicture.requestWindow({
+                width: 400,
+                height: 500,
+            });
+
+            [...document.styleSheets].forEach((styleSheet) => {
+                try {
+                    const cssRules = [...styleSheet.cssRules].map(rule => rule.cssText).join('');
+                    const style = document.createElement('style');
+                    style.textContent = cssRules;
+                    pipWindow.document.head.appendChild(style);
+                } catch (e) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = styleSheet.href;
+                    pipWindow.document.head.appendChild(link);
+                }
+            });
+
+            const containerClone = document.querySelector('.container').cloneNode(true);
+            pipWindow.document.body.style.margin = '10px';
+            pipWindow.document.body.style.backgroundColor = '#f0f2f5';
+            pipWindow.document.body.appendChild(containerClone);
+
+            pipWindow.document.getElementById('btn-procesar').addEventListener('click', () => {
+                const txt = pipWindow.document.getElementById('texto-input').value;
+                const res = procesarSLERDinamico(txt);
+                const out = pipWindow.document.getElementById('resultado');
+                out.style.display = 'block';
+                out.textContent = res;
+            });
+
+        } catch (err) {
+            console.error("Error al abrir ventana flotante:", err);
+        }
+    } else {
+        alert("Tu navegador no soporta ventanas flotantes independientes persistentes.");
+    }
 }
