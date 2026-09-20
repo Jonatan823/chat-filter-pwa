@@ -14,7 +14,6 @@ document.getElementById('btn-procesar').addEventListener('click', () => {
         const divResultado = document.getElementById('resultado');
         divResultado.style.display = 'block';
         
-        // Ejecutamos el procesamiento adaptativo basado en el ancho real del contenedor
         const resultadoHTML = procesarSLERDinamico(textoInput, divResultado);
         divResultado.textContent = resultadoHTML;
     } catch (error) {
@@ -27,15 +26,11 @@ document.getElementById('btn-procesar').addEventListener('click', () => {
 });
 
 function procesarSLERDinamico(texto, contenedorSalida) {
-    // 1. Obtenemos el ancho útil en píxeles del contenedor de salida
     const computedStyle = window.getComputedStyle(contenedorSalida);
     const paddingX = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
     const anchoUtilPx = contenedorSalida.clientWidth - paddingX;
-
-    // Si por alguna razón el ancho es 0 (elemento oculto momentáneamente), usamos un valor por defecto seguro
     const maxWidth = anchoUtilPx > 0 ? anchoUtilPx : 300;
 
-    // 2. Creamos un span temporal invisible para medir el ancho exacto de las palabras en píxeles
     const spanMedicion = document.createElement('span');
     spanMedicion.style.visibility = 'hidden';
     spanMedicion.style.position = 'absolute';
@@ -52,7 +47,6 @@ function procesarSLERDinamico(texto, contenedorSalida) {
     let lineas = [];
     let lineaActual = "";
 
-    // 3. Distribución dinámica de palabras según el ancho en píxeles
     for (let palabra of palabras) {
         let pruebaLinea = lineaActual ? lineaActual + " " + palabra : palabra;
         if (medirTexto(pruebaLinea) <= maxWidth) {
@@ -66,14 +60,13 @@ function procesarSLERDinamico(texto, contenedorSalida) {
         lineas.push(lineaActual);
     }
 
-    // Limpiamos el span de medición
     document.body.removeChild(spanMedicion);
 
-    // 4. Aplicación de la lógica S.L.E.R. (Impares M, Pares C con inversión y signos)
+    // Procesamiento sin indicativos M/C, manteniendo la alternancia y la inversión
     let lineasProcesadas = lineas.map((linea, index) => {
         let numeroRenglon = index + 1;
         if (numeroRenglon % 2 !== 0) {
-            return `M${numeroRenglon}: ${linea}`;
+            return linea;
         } else {
             let palabrasLinea = linea.split(' ');
             let invertidas = palabrasLinea.reverse().map(p => {
@@ -84,9 +77,40 @@ function procesarSLERDinamico(texto, contenedorSalida) {
                 }
                 return p;
             });
-            return `C${numeroRenglon}: ${invertidas.join(' ')}`;
+            return invertidas.join(' ');
         }
     });
 
     return lineasProcesadas.join('\n');
+}
+
+// Ventana flotante y arrastrable solo para escritorio
+if (window.innerWidth > 768) {
+    const container = document.querySelector('.container');
+    let isDragging = false;
+    let startX, startY;
+
+    container.style.position = 'absolute';
+    container.style.top = '50px';
+    container.style.left = '50px';
+    container.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)';
+
+    container.addEventListener('mousedown', (e) => {
+        if (['TEXTAREA', 'BUTTON', 'INPUT'].includes(e.target.tagName)) return;
+        isDragging = true;
+        startX = e.clientX - container.offsetLeft;
+        startY = e.clientY - container.offsetTop;
+        container.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        container.style.left = (e.clientX - startX) + 'px';
+        container.style.top = (e.clientY - startY) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        container.style.cursor = 'default';
+    });
 }
