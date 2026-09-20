@@ -8,68 +8,74 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            background-color: transparent; /* Permite ver el fondo si la app está en una ventana independiente */
             margin: 0;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 10px;
             min-height: 100vh;
             box-sizing: border-box;
         }
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.90); /* Fondo blanco translúcido (90% opacidad) */
+            backdrop-filter: blur(5px); /* Efecto esmerilado translúcido moderno */
             padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            width: 380px; /* Ancho fijo cómodo tipo panel flotante en PC */
             box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
+        /* El resto de tus estilos se mantienen igual */
         h3 {
             margin-top: 0;
             text-align: center;
             color: #333;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            cursor: grab; /* Indica que la cabecera arrastra la ventana */
+        }
+        h3:active {
+            cursor: grabbing;
         }
         textarea {
             width: 100%;
-            height: 120px;
-            padding: 10px;
+            height: 100px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 10px;
-            resize: none;
+            resize: vertical;
             box-sizing: border-box;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         button {
             background-color: #00a884;
             color: white;
             border: none;
-            padding: 12px 15px;
+            padding: 10px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
             font-size: 1rem;
             margin-bottom: 10px;
+            box-sizing: border-box;
         }
         button:active {
             background-color: #008f70;
         }
         .output-box {
-            background: #fafafa;
+            background: rgba(250, 250, 250, 0.95);
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 10px;
-            margin-top: 15px;
+            padding: 8px;
+            margin-top: 10px;
             max-height: 250px;
             overflow-y: auto;
             font-family: monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            line-height: 1.4;
             white-space: pre-wrap;
+            box-sizing: border-box;
+            word-break: break-word;
         }
     </style>
 </head>
