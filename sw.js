@@ -1,6 +1,6 @@
 self.addEventListener('install', (e) => {
     e.waitUntil(
-        caches.open('ler-cache-v3') // Cambia v1 por v2
+        caches.open('sler-cache-v3') // Cambia v1 por v2
             return cache.addAll([
                 'index.html',
                 'app.js',
