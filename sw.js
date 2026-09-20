@@ -1,11 +1,15 @@
+const CACHE_NAME = 'sler-cache-v6';
+const urlsToCache = [
+    './',
+    './index.html',
+    './app.js',
+    './manifest.json'
+];
+
 self.addEventListener('install', (e) => {
     e.waitUntil(
-        caches.open('sler-cache-v3') // Cambia v1 por v2
-            return cache.addAll([
-                'index.html',
-                'app.js',
-                'manifest.json'
-            ]);
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(urlsToCache);
         })
     );
 });
