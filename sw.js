@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sler-cache-v8';
+const CACHE_NAME = 'sler-cache-v9';
 const urlsToCache = [
     './',
     './index.html',
