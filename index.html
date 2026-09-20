@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.L.E.R. Móvil - Lectura Recíproca</title>
+    <title>S.L.E.R. Móvil</title>
     <link rel="manifest" href="manifest.json">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: transparent; /* Permite ver el fondo si la app está en una ventana independiente */
+            background-color: #f0f2f5;
             margin: 0;
             padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
         }
         .container {
-            background: rgba(255, 255, 255, 0.90); /* Fondo blanco translúcido (90% opacidad) */
-            backdrop-filter: blur(5px); /* Efecto esmerilado translúcido moderno */
+            background: white;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            width: 380px; /* Ancho fijo cómodo tipo panel flotante en PC */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
             box-sizing: border-box;
-            border: 1px solid rgba(255, 255, 255, 0.4);
         }
-        /* El resto de tus estilos se mantienen igual */
         h3 {
             margin-top: 0;
             text-align: center;
             color: #333;
             font-size: 1.1rem;
-            cursor: grab; /* Indica que la cabecera arrastra la ventana */
+            cursor: grab;
         }
         h3:active {
             cursor: grabbing;
         }
         textarea {
             width: 100%;
-            height: 100px;
+            height: 110px;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -50,7 +51,7 @@
             background-color: #00a884;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
@@ -62,8 +63,14 @@
         button:active {
             background-color: #008f70;
         }
+        .btn-pip {
+            background-color: #4a5568;
+        }
+        .btn-pip:active {
+            background-color: #2d3748;
+        }
         .output-box {
-            background: rgba(250, 250, 250, 0.95);
+            background: #fafafa;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 8px;
@@ -76,6 +83,7 @@
             white-space: pre-wrap;
             box-sizing: border-box;
             word-break: break-word;
+            display: none;
         }
     </style>
 </head>
@@ -85,18 +93,16 @@
         <h3>S.L.E.R. Móvil</h3>
         <textarea id="texto-input" placeholder="Pega tu texto aquí..."></textarea>
         <button id="btn-procesar">🔄 Aplicar S.L.E.R.</button>
-        
-        <div id="resultado" class="output-box" style="display:none;"></div>
+        <button class="btn-pip" onclick="abrirVentanaFlotanteReal()">📌 Abrir como Pop-up Flotante</button>
+        <div id="resultado" class="output-box"></div>
     </div>
 
     <script src="app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((reg) => console.log('Service Worker registrado:', reg.scope))
-                    .catch((err) => console.log('Error Service Worker:', err));
-            });
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Service Worker registrado con éxito."))
+                .catch(err => console.log("Error al registrar Service Worker:", err));
         }
     </script>
 </body>
