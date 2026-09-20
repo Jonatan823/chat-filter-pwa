@@ -84,23 +84,22 @@ function procesarSLERDinamico(texto, contenedorSalida) {
     return lineasProcesadas.join('\n');
 }
 
-// Ventana flotante y arrastrable solo para escritorio
+// Ventana flotante y arrastrable solo para escritorio (desde el título)
 if (window.innerWidth > 768) {
     const container = document.querySelector('.container');
+    const header = container.querySelector('h3');
     let isDragging = false;
     let startX, startY;
 
     container.style.position = 'absolute';
-    container.style.top = '50px';
-    container.style.left = '50px';
-    container.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)';
+    container.style.top = '20px';
+    container.style.left = '20px';
 
-    container.addEventListener('mousedown', (e) => {
-        if (['TEXTAREA', 'BUTTON', 'INPUT'].includes(e.target.tagName)) return;
+    header.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.clientX - container.offsetLeft;
         startY = e.clientY - container.offsetTop;
-        container.style.cursor = 'grabbing';
+        e.preventDefault(); // Evita selección de texto accidental al arrastrar
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -111,6 +110,5 @@ if (window.innerWidth > 768) {
 
     document.addEventListener('mouseup', () => {
         isDragging = false;
-        container.style.cursor = 'default';
     });
 }
